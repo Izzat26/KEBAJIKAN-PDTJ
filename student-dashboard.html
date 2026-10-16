@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kebajikan Pusat Dakwah Dan Tarbiah Al-Jazari</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Primary — Navy */
+      --green:    #1b3a6b;
+      --green-dk: #0f2548;
+      --green-lt: #dce8f8;
+      /* Gold accent */
+      --gold:     #c9970a;
+      --gold-lt:  #fdf6e3;
+      /* Chart colours */
+      --blue:     #1565c0;
+      --blue-lt:  #e3f0ff;
+      --purple:   #5b21b6;
+      --purple-lt:#ede9fe;
+      --orange:   #b45309;
+      --orange-lt:#fff7ed;
+      --teal:     #0e7490;
+      --teal-lt:  #e0f7fa;
+      --red:      #be123c;
+      --red-lt:   #fff1f2;
+      /* UI */
+      --bg:       #f0f4fa;
+      --surface:  #ffffff;
+      --border:   #d4dde8;
+      --text:     #0f172a;
+      --muted:    #475569;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ──────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #0f2548 0%, #1b3a6b 60%, #1e4d8c 100%);
+      color: #fff;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    }
+    .header-pattern {
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(45deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 12px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 12px);
+      pointer-events: none;
+    }
+    .header-accent {
+      position: absolute; right: -60px; top: -60px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,151,10,.22) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-accent2 {
+      position: absolute; left: -40px; bottom: -50px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner {
+      position: relative;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .header-logo {
+      width: 80px; height: 80px;
+      background: transparent;
+      border: none;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .header-logo svg { width: 100%; height: 100%; }
+    .header-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: .3px;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 5px;
+      background: rgba(184,134,11,.3);
+      border: 1px solid rgba(184,134,11,.5);
+      color: #f5d060;
+      font-size: .72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .header-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #f5d060;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(1.4); }
+    }
+
+    /* ── LAYOUT ──────────────────────────────────── */
+    .main-wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 20px 56px;
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ── FORM CARD ───────────────────────────────── */
+    .form-card {
+      background: var(--surface);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+      overflow: hidden;
+      position: sticky;
+      top: 24px;
+      border: 1px solid var(--border);
+    }
+    .form-card-header {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-dk) 100%);
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-card-header h2 {
+      font-size: .95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .form-card-body { padding: 20px 22px; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 9px 13px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      font-size: .9rem;
+      color: var(--text);
+      background: #fafcf8;
+      transition: border-color .2s, box-shadow .2s;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--green);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(26,107,60,.12);
+    }
+
+    .radio-group { display: flex; gap: 12px; margin-top: 4px; }
+    .radio-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 9px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .radio-option:has(input:checked) {
+      border-color: var(--green);
+      background: var(--green-lt);
+      color: var(--green-dk);
+    }
+    .radio-option input[type="radio"] { accent-color: var(--green); width: 15px; height: 15px; }
+
+    .btn {
+      width: 100%;
+      padding: 11px 16px;
+      border: none;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+    }
+    .btn:hover  { opacity: .9; box-shadow: 0 4px 12px rgba(0,0,0,.15); transform: translateY(-1px); }
+    .btn:active { transform: scale(.97); box-shadow: none; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .btn-submit { background: linear-gradient(135deg, #1b3a6b 0%, #0f2548 100%); color: #fff; margin-bottom: 8px; }
+    .btn-reset  { background: #f4f6f0; color: var(--muted); border: 1.5px solid var(--border); margin-bottom: 8px; }
+    .btn-export-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn-excel  { background: linear-gradient(135deg, #166534 0%, #14532d 100%); color: #fff; }
+    .btn-pdf    { background: linear-gradient(135deg, #be123c 0%, #9f1239 100%); color: #fff; }
+
+    .form-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 16px 0;
+    }
+
+    /* ── STATS BAR ───────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      padding: 20px 22px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+    .stat-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--accent-color);
+      border-radius: 16px 16px 0 0;
+    }
+    .stat-card .stat-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--accent-bg);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 12px;
+    }
+    .stat-card .label { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+    .stat-card .value { font-size: 1.6rem; font-weight: 800; color: var(--accent-color); margin: 4px 0 2px; line-height: 1.1; }
+    .stat-card .sub   { font-size: .78rem; color: var(--muted); }
+
+    /* ── CHARTS GRID ─────────────────────────────── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .chart-card {
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      padding: 22px 20px;
+      border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .chart-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 16px 16px 0 0;
+    }
+    .chart-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+    .chart-card.full-width { grid-column: 1 / -1; }
+
+    .chart-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .chart-card-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .chart-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--accent-bg, #f0f2f5);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .chart-card h3 {
+      font-size: .88rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .chart-badge {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--accent-bg, #f0f2f5);
+      color: var(--accent, #57606a);
+    }
+
+    .chart-wrap { position: relative; height: 220px; }
+    .chart-wrap.tall { height: 270px; }
+
+    /* Name list panel */
+    .name-list-panel {
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .name-list-panel::-webkit-scrollbar { width: 4px; }
+    .name-list-panel::-webkit-scrollbar-track { background: #f0f2f0; border-radius: 4px; }
+    .name-list-panel::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+    .name-list-panel ol { padding-left: 0; list-style: none; counter-reset: name-counter; }
+    .name-list-panel li {
+      counter-increment: name-counter;
+      padding: 8px 10px;
+      border-bottom: 1px solid #f0f4f0;
+      font-size: .88rem;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background .15s;
+      border-radius: 7px;
+      margin-bottom: 2px;
+    }
+    .name-list-panel li:hover { background: #f0f8f4; }
+    .name-list-panel li::before {
+      content: counter(name-counter);
+      min-width: 24px; height: 24px;
+      background: var(--green-lt);
+      color: var(--green-dk);
+      border-radius: 6px;
+      font-size: .75rem;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .name-list-panel li:last-child { border-bottom: none; }
+    .empty-msg {
+      color: #adb5bd;
+      font-size: .85rem;
+      text-align: center;
+      padding: 32px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .empty-msg svg { opacity: .3; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--green-dk);
+      color: #fff;
+      padding: 13px 22px;
+      border-radius: 12px;
+      font-size: .88rem;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity .3s, transform .3s;
+      z-index: 999;
+      border-left: 4px solid var(--gold);
+      max-width: 320px;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Section label */
+    .section-label {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    @media (max-width: 1024px) {
+      .main-wrap { grid-template-columns: 1fr; }
+      .form-card { position: static; }
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .main-wrap { padding: 16px 12px 40px; gap: 16px; }
+      .stats-bar { grid-template-columns: 1fr; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .chart-card.full-width { grid-column: auto; }
+      .header-inner { padding: 16px 18px; }
+      .header-text h1 { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-pattern"></div>
+  <div class="header-accent"></div>
+  <div class="header-accent2"></div>
+  <div class="header-inner">
+    <div class="header-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" style="width:100%;height:100%">
+        <defs>
+          <!-- Circular text paths -->
+          <path id="arcTop"    d="M 55,250 A 195,195 0 0,1 445,250" fill="none"/>
+          <path id="arcBottom" d="M 445,250 A 195,195 0 0,1 55,250"  fill="none"/>
+          <!-- Clip to circle -->
+          <clipPath id="circClip">
+            <circle cx="250" cy="250" r="195"/>
+          </clipPath>
+        </defs>
+
+        <!-- ── OUTER RING (white outline circle) ── -->
+        <circle cx="250" cy="250" r="240" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="2"/>
+        <circle cx="250" cy="250" r="222" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/>
+
+        <!-- ── CURVED TEXT (white) ── -->
+        <text font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="22" fill="#ffffff" letter-spacing="1.8">
+          <textPath href="#arcTop" startOffset="50%" text-anchor="middle">PUSAT DAKWAH DAN TARBIAH AL-JAZARI</textPath>
+        </text>
+        <text font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="19" fill="rgba(255,255,255,0.85)" letter-spacing="1.2">
+          <textPath href="#arcBottom" startOffset="50%" text-anchor="middle">Politeknik Tuanku Sultanah Bahiyah</textPath>
+        </text>
+
+        <!-- Diamond separators (white) -->
+        <polygon points="48,250 58,238 68,250 58,262" fill="#ffffff"/>
+        <polygon points="452,250 442,238 432,250 442,262" fill="#ffffff"/>
+
+        <!-- ── INNER CONTENT AREA ── -->
+        <g clip-path="url(#circClip)">
+
+          <!-- Green rehal/book base -->
+          <path d="M 110,345 L 250,420 L 390,345 L 390,372 L 250,447 L 110,372 Z" fill="#7EC242"/>
+          <!-- White line on rehal -->
+          <path d="M 116,356 L 250,428 L 384,356" stroke="#ffffff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- ── HONEYCOMB / ARCH GRID (green) ── -->
+          <path d="M 192,258 Q 215,215 238,258" fill="#7EC242"/>
+          <path d="M 262,258 Q 285,215 308,258" fill="#7EC242"/>
+          <path d="M 168,300 Q 191,258 214,300" fill="#7EC242"/>
+          <path d="M 226,300 Q 249,258 272,300" fill="#7EC242"/>
+          <path d="M 284,300 Q 307,258 330,300" fill="#7EC242"/>
+          <path d="M 144,342 Q 167,300 190,342" fill="#7EC242"/>
+          <path d="M 202,342 Q 225,300 248,342" fill="#7EC242"/>
+          <path d="M 260,342 Q 283,300 306,342" fill="#7EC242"/>
+          <path d="M 318,342 Q 341,300 364,342" fill="#7EC242"/>
+
+          <!-- ── WHITE STAR FRAME TRIANGLES ── -->
+          <polygon points="250,105 263,148 237,148" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="346,142 322,178 308,150" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="395,238 352,238 352,212" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="346,318 308,296 322,268" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="154,142 178,150 192,178" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="105,238 148,212 148,238" fill="rgba(255,255,255,0.9)"/>
+          <polygon points="154,318 192,268 178,296" fill="rgba(255,255,255,0.9)"/>
+
+          <!-- ── OCTAGRAM BORDER (green) ── -->
+          <polygon points="
+            250,108 282,148 330,148 330,196
+            370,228 330,260 330,308 282,308
+            250,348 218,308 170,308 170,260
+            130,228 170,196 170,148 218,148"
+            fill="none" stroke="#7EC242" stroke-width="14" stroke-linejoin="round"/>
+
+          <!-- Inner area transparent -->
+          <polygon points="
+            250,124 278,158 318,158 318,198
+            352,228 318,258 318,298 278,298
+            250,332 222,298 182,298 182,258
+            148,228 182,198 182,158 222,158"
+            fill="transparent"/>
+
+          <!-- ── PDTJ TEXT (white) ── -->
+          <text x="250" y="248" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="52" text-anchor="middle" letter-spacing="2" fill="#ffffff">PDTJ</text>
+
+        </g>
+      </svg>
+    </div>
+    <div class="header-text">
+      <h1>KEBAJIKAN PUSAT DAKWAH DAN TARBIAH AL-JAZARI</h1>
+    </div>
+  </div>
+</header>
+
+<div class="main-wrap">
+
+  <!-- ── FORM ── -->
+  <aside>
+    <div class="form-card">
+      <div class="form-card-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+        </svg>
+        <h2>Tambah Rekod Pelajar</h2>
+      </div>
+      <div class="form-card-body">
+
+        <div class="form-group">
+          <label>Nama Penuh</label>
+          <input type="text" id="f-name" placeholder="cth. AHMAD FARIS BIN ZULKIFLI" autocomplete="off" style="text-transform:uppercase"/>
+        </div>
+
+        <div class="form-group">
+          <label>Negeri Asal</label>
+          <select id="f-origin">
+            <option value="">— Pilih Negeri —</option>
+            <option>Johor</option><option>Kedah</option><option>Kelantan</option>
+            <option>Melaka</option><option>Negeri Sembilan</option><option>Pahang</option>
+            <option>Perak</option><option>Perlis</option><option>Pulau Pinang</option>
+            <option>Sabah</option><option>Sarawak</option><option>Selangor</option>
+            <option>Terengganu</option><option>Kuala Lumpur</option><option>Labuan</option>
+            <option>Putrajaya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Jantina</label>
+          <div class="radio-group">
+            <label class="radio-option">
+              <input type="radio" name="gender" value="Male" checked/>
+              <span>Lelaki</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="gender" value="Female"/>
+              <span>Perempuan</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Pendapatan Keluarga</label>
+          <select id="f-income">
+            <option value="">— Pilih Julat —</option>
+            <option>Less than RM1,000</option>
+            <option>RM1,001 – RM3,000</option>
+            <option>RM3,001 – RM5,000</option>
+            <option>More than RM5,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Semester</label>
+          <select id="f-semester">
+            <option value="">— Pilih Semester —</option>
+            <option>Semester 1</option><option>Semester 2</option>
+            <option>Semester 3</option><option>Semester 4</option>
+            <option>Semester 5</option><option>Semester 6</option>
+            <option>Semester 7</option><option>Semester 8</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Jabatan</label>
+          <select id="f-dept">
+            <option value="">— Pilih Jabatan —</option>
+            <option>Awam</option>
+            <option>Elektrik</option>
+            <option>Mekanikal</option>
+            <option>Perdagangan</option>
+          </select>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <button class="btn btn-submit" onclick="addStudent()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Rekod
+        </button>
+        <button class="btn btn-reset" onclick="resetAll()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Set Semula
+        </button>
+
+        <div class="section-label" style="margin-top:4px">Eksport Data</div>
+
+        <div class="btn-export-row">
+          <button class="btn btn-excel" id="btn-excel" onclick="downloadExcel()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Excel
+          </button>
+          <button class="btn btn-pdf" id="btn-pdf" onclick="downloadPDF()" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            PDF
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── DASHBOARD ── -->
+  <main>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card" style="--accent-color:var(--green);--accent-bg:var(--green-lt)">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="label">Jumlah Pelajar</div>
+        <div class="value" id="stat-total">0</div>
+        <div class="sub">rekod dimasukkan</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--blue);--accent-bg:var(--blue-lt)">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="label">Negeri Terbanyak</div>
+        <div class="value" id="stat-origin" style="font-size:1.05rem;line-height:1.3">—</div>
+        <div class="sub">negeri asal</div>
+      </div>
+      <div class="stat-card" style="--accent-color:var(--red);--accent-bg:var(--red-lt)">
+        <div class="stat-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        </div>
+        <div class="label">Jabatan Utama</div>
+        <div class="value" id="stat-dept" style="font-size:1.05rem;line-height:1.3">—</div>
+        <div class="sub">jabatan</div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+
+      <!-- Name List -->
+      <div class="chart-card" style="--accent:var(--green);--accent-bg:var(--green-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            </div>
+            <h3>Senarai Nama Pelajar</h3>
+          </div>
+          <span class="chart-badge" id="name-count-badge" style="color:var(--green)">0 pelajar</span>
+        </div>
+        <div class="name-list-panel" id="name-list">
+          <div class="empty-msg">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Tiada rekod lagi. Tambah rekod pelajar.
+          </div>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="chart-card" style="--accent:var(--purple);--accent-bg:var(--purple-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 12v8"/><path d="M9 18h6"/></svg>
+            </div>
+            <h3>Agihan Jantina</h3>
+          </div>
+          <span class="chart-badge" style="color:var(--purple)">%</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chart-gender"></canvas>
+        </div>
+      </div>
+
+      <!-- Origin -->
+      <div class="chart-card" style="--accent:var(--blue);--accent-bg:var(--blue-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h3>Agihan Negeri Asal</h3>
+          </div>
+          <span class="chart-badge" style="color:var(--blue)">%</span>
+        </div>
+        <div class="chart-wrap tall">
+          <canvas id="chart-origin"></canvas>
+        </div>
+      </div>
+
+      <!-- Income -->
+      <div class="chart-card" style="--accent:var(--orange);--accent-bg:var(--orange-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <h3>Pendapatan Keluarga</h3>
+          </div>
+          <span class="chart-badge" style="color:var(--orange)">%</span>
+        </div>
+        <div class="chart-wrap tall">
+          <canvas id="chart-income"></canvas>
+        </div>
+      </div>
+
+      <!-- Semester -->
+      <div class="chart-card" style="--accent:var(--teal);--accent-bg:var(--teal-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <h3>Agihan Semester</h3>
+          </div>
+          <span class="chart-badge" style="color:var(--teal)">%</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="chart-semester"></canvas>
+        </div>
+      </div>
+
+      <!-- Department -->
+      <div class="chart-card full-width" style="--accent:var(--red);--accent-bg:var(--red-lt)">
+        <div class="chart-card-header">
+          <div class="chart-card-title">
+            <div class="chart-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+            </div>
+            <h3>Agihan Jabatan</h3>
+          </div>
+          <span class="chart-badge" style="color:var(--red)">%</span>
+        </div>
+        <div class="chart-wrap tall">
+          <canvas id="chart-dept"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── DATA STORE ─────────────────────────────────────────────
+  let students = [];
+
+  const charts = {};
+
+  const INCOME_LABELS = ['< RM1,000','RM1,001–RM3,000','RM3,001–RM5,000','> RM5,000'];
+  const INCOME_KEYS   = ['Less than RM1,000','RM1,001 – RM3,000','RM3,001 – RM5,000','More than RM5,000'];
+  const SEM_LABELS    = ['Sem 1','Sem 2','Sem 3','Sem 4','Sem 5','Sem 6','Sem 7','Sem 8'];
+  const SEM_KEYS      = SEM_LABELS.map((_,i) => `Semester ${i+1}`);
+
+  const palette = {
+    gender:   ['#5b21b6','#ec4899'],
+    origin:   ['#1565c0','#1976d2','#1e88e5','#2196f3','#42a5f5','#64b5f6','#90caf9','#bbdefb','#0d47a1','#1565c0','#1976d2','#1e88e5','#2196f3','#42a5f5','#64b5f6','#90caf9'],
+    income:   ['#b45309','#d97706','#f59e0b','#fcd34d'],
+    semester: ['#0e7490','#0891b2','#06b6d4','#22d3ee','#67e8f9','#a5f3fc','#cffafe','#e0f7fa'],
+    dept:     ['#be123c','#e11d48','#f43f5e','#fb7185'],
+  };
+
+  // ── INIT CHARTS ────────────────────────────────────────────
+  function initCharts() {
+    Chart.defaults.font.family = "'Inter', 'Segoe UI', system-ui, sans-serif";
+    Chart.defaults.plugins.legend.labels.boxWidth = 12;
+    Chart.defaults.plugins.legend.labels.padding  = 12;
+    Chart.defaults.plugins.tooltip.padding        = 10;
+    Chart.defaults.plugins.tooltip.cornerRadius   = 8;
+
+    charts.gender = new Chart(document.getElementById('chart-gender'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Lelaki','Perempuan'],
+        datasets: [{ data:[0,0], backgroundColor: palette.gender, borderWidth: 3, borderColor: '#fff', hoverOffset: 8 }]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false, cutout:'65%',
+        plugins:{ legend:{ position:'bottom', labels:{ font:{ size:12, weight:'600' } } } }
+      }
+    });
+
+    charts.origin = new Chart(document.getElementById('chart-origin'), {
+      type: 'bar',
+      data: { labels:[], datasets:[{ label:'Pelajar', data:[], backgroundColor: palette.origin, borderRadius:6, borderSkipped:false }] },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } },
+        scales:{
+          y:{ beginAtZero:true, ticks:{ precision:0, callback:v=>`${v}%`, font:{size:11} }, grid:{ color:'rgba(0,0,0,.05)' } },
+          x:{ ticks:{ font:{size:11} }, grid:{ display:false } }
+        }
+      }
+    });
+
+    charts.income = new Chart(document.getElementById('chart-income'), {
+      type: 'bar',
+      data: { labels: INCOME_LABELS, datasets:[{ label:'Pelajar', data:[0,0,0,0], backgroundColor: palette.income, borderRadius:6, borderSkipped:false }] },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } },
+        scales:{
+          y:{ beginAtZero:true, ticks:{ precision:0, callback:v=>`${v}%`, font:{size:11} }, grid:{ color:'rgba(0,0,0,.05)' } },
+          x:{ ticks:{ font:{size:11} }, grid:{ display:false } }
+        }
+      }
+    });
+
+    charts.semester = new Chart(document.getElementById('chart-semester'), {
+      type: 'bar',
+      data: { labels: SEM_LABELS, datasets:[{ label:'Pelajar', data:[0,0,0,0,0,0,0,0], backgroundColor: palette.semester, borderRadius:6, borderSkipped:false }] },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } },
+        scales:{
+          y:{ beginAtZero:true, ticks:{ precision:0, callback:v=>`${v}%`, font:{size:11} }, grid:{ color:'rgba(0,0,0,.05)' } },
+          x:{ grid:{ display:false } }
+        }
+      }
+    });
+
+    charts.dept = new Chart(document.getElementById('chart-dept'), {
+      type: 'bar',
+      data: { labels:[], datasets:[{ label:'Pelajar', data:[], backgroundColor: palette.dept, borderRadius:6, borderSkipped:false }] },
+      options: {
+        indexAxis: 'y',
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}%` } } },
+        scales:{
+          x:{ beginAtZero:true, ticks:{ precision:0, callback:v=>`${v}%`, font:{size:11} }, grid:{ color:'rgba(0,0,0,.05)' } },
+          y:{ ticks:{ font:{size:12, weight:'600'} }, grid:{ display:false } }
+        }
+      }
+    });
+  }
+
+  // ── ADD STUDENT ────────────────────────────────────────────
+  function addStudent() {
+    const name    = document.getElementById('f-name').value.trim();
+    const origin  = document.getElementById('f-origin').value;
+    const gender  = document.querySelector('input[name="gender"]:checked').value;
+    const income  = document.getElementById('f-income').value;
+    const semester= document.getElementById('f-semester').value;
+    const dept    = document.getElementById('f-dept').value;
+
+    if (!name)     { shake('f-name');     showToast('⚠ Sila masukkan nama pelajar.'); return; }
+    if (!origin)   { shake('f-origin');   showToast('⚠ Sila pilih negeri asal.'); return; }
+    if (!income)   { shake('f-income');   showToast('⚠ Sila pilih julat pendapatan.'); return; }
+    if (!semester) { shake('f-semester'); showToast('⚠ Sila pilih semester.'); return; }
+    if (!dept)     { shake('f-dept');     showToast('⚠ Sila pilih jabatan.'); return; }
+
+    students.push({ name, origin, gender, income, semester, dept });
+    clearForm();
+    updateDashboard();
+    showToast(`✓ ${name} berjaya ditambah!`);
+    document.getElementById('btn-excel').disabled = false;
+    document.getElementById('btn-pdf').disabled   = false;
+  }
+
+  // ── UPDATE DASHBOARD ────────────────────────────────────────
+  function updateDashboard() {
+    const n = students.length;
+    if (n === 0) return;
+
+    document.getElementById('stat-total').textContent  = n;
+    document.getElementById('stat-origin').textContent = mode(students.map(s=>s.origin)) || '—';
+    document.getElementById('stat-dept').textContent   = mode(students.map(s=>s.dept))   || '—';
+    document.getElementById('name-count-badge').textContent = `${n} pelajar`;
+
+    // Name list
+    const panel = document.getElementById('name-list');
+    panel.innerHTML = '';
+    const ol = document.createElement('ol');
+    students.forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = s.name;
+      ol.appendChild(li);
+    });
+    panel.appendChild(ol);
+
+    // Gender chart
+    const maleCount   = students.filter(s=>s.gender==='Male').length;
+    const femaleCount = students.filter(s=>s.gender==='Female').length;
+    charts.gender.data.datasets[0].data = [pct(maleCount,n), pct(femaleCount,n)];
+    charts.gender.update();
+
+    // Origin chart
+    const originMap = countMap(students.map(s=>s.origin));
+    charts.origin.data.labels = Object.keys(originMap);
+    charts.origin.data.datasets[0].data = Object.values(originMap).map(v=>pct(v,n));
+    charts.origin.data.datasets[0].backgroundColor = palette.origin.slice(0, Object.keys(originMap).length);
+    charts.origin.update();
+
+    // Income chart
+    charts.income.data.datasets[0].data = INCOME_KEYS.map(k => pct(students.filter(s=>s.income===k).length, n));
+    charts.income.update();
+
+    // Semester chart
+    charts.semester.data.datasets[0].data = SEM_KEYS.map(k => pct(students.filter(s=>s.semester===k).length, n));
+    charts.semester.update();
+
+    // Dept chart
+    const deptMap = countMap(students.map(s=>s.dept));
+    charts.dept.data.labels = Object.keys(deptMap);
+    charts.dept.data.datasets[0].data = Object.values(deptMap).map(v=>pct(v,n));
+    charts.dept.data.datasets[0].backgroundColor = palette.dept.slice(0, Object.keys(deptMap).length);
+    charts.dept.update();
+  }
+
+  // ── RESET ──────────────────────────────────────────────────
+  function resetAll() {
+    if (students.length > 0 && !confirm('Set semula semua data? Tindakan ini tidak boleh dibatalkan.')) return;
+    students = [];
+    document.getElementById('stat-total').textContent  = '0';
+    document.getElementById('stat-origin').textContent = '—';
+    document.getElementById('stat-dept').textContent   = '—';
+    document.getElementById('name-count-badge').textContent = '0 pelajar';
+    document.getElementById('name-list').innerHTML = '<div class="empty-msg"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Tiada rekod lagi. Tambah rekod pelajar.</div>';
+    document.getElementById('btn-excel').disabled = true;
+    document.getElementById('btn-pdf').disabled   = true;
+
+    charts.gender.data.datasets[0].data = [0,0];
+    charts.origin.data.labels = []; charts.origin.data.datasets[0].data = [];
+    charts.income.data.datasets[0].data = [0,0,0,0];
+    charts.semester.data.datasets[0].data = [0,0,0,0,0,0,0,0];
+    charts.dept.data.labels = []; charts.dept.data.datasets[0].data = [];
+    Object.values(charts).forEach(c=>c.update());
+    showToast('✓ Dashboard telah diset semula.');
+  }
+
+  // ── DOWNLOAD EXCEL ─────────────────────────────────────────
+  function downloadExcel() {
+    if (!students.length) return;
+    const rows = [['No.','Nama','Negeri Asal','Jantina','Pendapatan Keluarga','Semester','Jabatan']];
+    students.forEach((s,i) => rows.push([i+1, s.name, s.origin, s.gender==='Male'?'Lelaki':'Perempuan', s.income, s.semester, s.dept]));
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols'] = [4,28,18,12,24,14,18].map(w=>({wch:w}));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Data Pelajar');
+    XLSX.writeFile(wb, 'data_pelajar_al-jazari.xlsx');
+    showToast('✓ Fail Excel berjaya dimuat turun!');
+  }
+
+  // ── DOWNLOAD PDF ───────────────────────────────────────────
+  function downloadPDF() {
+    if (!students.length) return;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+    doc.setFillColor(17, 77, 43);
+    doc.rect(0, 0, 297, 30, 'F');
+    doc.setFillColor(184, 134, 11);
+    doc.rect(0, 30, 297, 1.5, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(15);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Kebajikan Pusat Dakwah Dan Tarbiah Al-Jazari', 148.5, 12, { align: 'center' });
+
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Laporan Data Pelajar', 148.5, 20, { align: 'center' });
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ms-MY', { day:'2-digit', month:'long', year:'numeric' });
+    const timeStr = now.toLocaleTimeString('ms-MY', { hour:'2-digit', minute:'2-digit' });
+    doc.text(`Tarikh Cetak: ${dateStr}  •  ${timeStr}`, 148.5, 26, { align: 'center' });
+
+    doc.setFillColor(248, 250, 248);
+    doc.rect(10, 35, 277, 14, 'F');
+    doc.setDrawColor(0, 100, 60);
+    doc.rect(10, 35, 277, 14);
+
+    doc.setTextColor(17, 77, 43);
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Jumlah Pelajar: ${students.length}`, 20, 43);
+    doc.text(`Negeri Terbanyak: ${document.getElementById('stat-origin').textContent}`, 100, 43);
+    doc.text(`Jabatan Utama: ${document.getElementById('stat-dept').textContent}`, 200, 43);
+
+    const head = [['No.','Nama Pelajar','Negeri Asal','Jantina','Pendapatan Keluarga','Semester','Jabatan']];
+    const body = students.map((s, i) => [i+1, s.name, s.origin, s.gender==='Male'?'Lelaki':'Perempuan', s.income, s.semester, s.dept]);
+
+    doc.autoTable({
+      head, body,
+      startY: 53,
+      styles: { fontSize: 8.5, cellPadding: 3.5, overflow: 'linebreak', font: 'helvetica' },
+      headStyles: { fillColor: [17, 77, 43], textColor: 255, fontStyle: 'bold', halign: 'center', fontSize: 8.5 },
+      alternateRowStyles: { fillColor: [244, 248, 244] },
+      columnStyles: {
+        0: { halign: 'center', cellWidth: 10 },
+        1: { cellWidth: 48 },
+        2: { cellWidth: 28 },
+        3: { halign: 'center', cellWidth: 22 },
+        4: { cellWidth: 44 },
+        5: { halign: 'center', cellWidth: 24 },
+        6: { halign: 'center', cellWidth: 'auto' }
+      },
+      margin: { left: 10, right: 10 },
+      didDrawPage: (data) => {
+        const pageCount = doc.internal.getNumberOfPages();
+        doc.setFillColor(17, 77, 43);
+        doc.rect(0, doc.internal.pageSize.height - 10, 297, 10, 'F');
+        doc.setFontSize(7);
+        doc.setTextColor(255);
+        doc.text(
+          `Muka surat ${data.pageNumber} / ${pageCount}   |   Kebajikan Pusat Dakwah Dan Tarbiah Al-Jazari`,
+          148.5, doc.internal.pageSize.height - 3.5, { align: 'center' }
+        );
+      }
+    });
+
+    doc.save('laporan_pelajar_al-jazari.pdf');
+    showToast('✓ Fail PDF berjaya dimuat turun!');
+  }
+
+  // ── HELPERS ────────────────────────────────────────────────
+  function pct(count, total) { return total ? Math.round(count / total * 100) : 0; }
+  function countMap(arr) { return arr.reduce((acc, v) => { acc[v] = (acc[v]||0)+1; return acc; }, {}); }
+  function mode(arr) {
+    if (!arr.length) return null;
+    const m = countMap(arr);
+    return Object.keys(m).reduce((a,b) => m[a]>=m[b] ? a : b);
+  }
+
+  function clearForm() {
+    document.getElementById('f-name').value    = '';
+    document.getElementById('f-origin').value  = '';
+    document.getElementById('f-income').value  = '';
+    document.getElementById('f-semester').value= '';
+    document.getElementById('f-dept').value    = '';
+    document.querySelector('input[name="gender"][value="Male"]').checked = true;
+  }
+
+  function shake(id) {
+    const el = document.getElementById(id);
+    el.style.borderColor = '#ef4444';
+    el.style.boxShadow = '0 0 0 3px rgba(239,68,68,.15)';
+    setTimeout(()=>{ el.style.borderColor = ''; el.style.boxShadow = ''; }, 1800);
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> t.classList.remove('show'), 3000);
+  }
+
+  document.getElementById('f-name').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addStudent();
+  });
+
+  initCharts();
+</script>
+</body>
+</html>
